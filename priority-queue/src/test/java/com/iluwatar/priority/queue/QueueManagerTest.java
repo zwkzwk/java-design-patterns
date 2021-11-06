@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,9 @@
 
 package com.iluwatar.priority.queue;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Check queue manager
@@ -33,22 +33,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class QueueManagerTest {
 
   @Test
-  public void publishMessage() {
-    QueueManager queueManager = new QueueManager(2);
-    Message testMessage = new Message("Test Message", 1);
+  void publishMessage() {
+    var queueManager = new QueueManager(2);
+    var testMessage = new Message("Test Message", 1);
     queueManager.publishMessage(testMessage);
-    Message recivedMessage = queueManager.receiveMessage();
+    var recivedMessage = queueManager.receiveMessage();
     assertEquals(testMessage, recivedMessage);
   }
 
   @Test
-  public void receiveMessage() {
-    QueueManager queueManager = new QueueManager(2);
-    Message testMessage1 = new Message("Test Message 1", 1);
+  void receiveMessage() {
+    var queueManager = new QueueManager(2);
+    var testMessage1 = new Message("Test Message 1", 1);
     queueManager.publishMessage(testMessage1);
-    Message testMessage2 = new Message("Test Message 2", 2);
+    var testMessage2 = new Message("Test Message 2", 2);
     queueManager.publishMessage(testMessage2);
-    Message recivedMessage = queueManager.receiveMessage();
+    var recivedMessage = queueManager.receiveMessage();
     assertEquals(testMessage2, recivedMessage);
   }
 }

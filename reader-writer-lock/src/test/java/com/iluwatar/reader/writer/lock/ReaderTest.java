@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,22 @@
 
 package com.iluwatar.reader.writer.lock;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+
 import com.iluwatar.reader.writer.lock.utils.InMemoryAppender;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.spy;
-
 /**
  * @author hongshuwei@gmail.com
  */
-public class ReaderTest {
+class ReaderTest {
 
   private InMemoryAppender appender;
 
@@ -60,13 +58,13 @@ public class ReaderTest {
    * Verify that multiple readers can get the read lock concurrently
    */
   @Test
-  public void testRead() throws Exception {
+  void testRead() throws Exception {
 
-    ExecutorService executeService = Executors.newFixedThreadPool(2);
-    ReaderWriterLock lock = new ReaderWriterLock();
+    var executeService = Executors.newFixedThreadPool(2);
+    var lock = new ReaderWriterLock();
 
-    Reader reader1 = spy(new Reader("Reader 1", lock.readLock()));
-    Reader reader2 = spy(new Reader("Reader 2", lock.readLock()));
+    var reader1 = spy(new Reader("Reader 1", lock.readLock()));
+    var reader2 = spy(new Reader("Reader 2", lock.readLock()));
 
     executeService.submit(reader1);
     Thread.sleep(150);

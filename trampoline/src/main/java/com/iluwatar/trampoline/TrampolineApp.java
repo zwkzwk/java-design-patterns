@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,9 +39,9 @@ public class TrampolineApp {
    * Main program for showing pattern. It does loop with factorial function.
    */
   public static void main(String[] args) {
-    log.info("start pattern");
+    LOGGER.info("start pattern");
     var result = loop(10, 1).result();
-    log.info("result {}", result);
+    LOGGER.info("result {}", result);
 
   }
 

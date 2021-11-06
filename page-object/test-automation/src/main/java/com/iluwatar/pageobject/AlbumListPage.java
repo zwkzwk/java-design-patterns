@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +28,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.IOException;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Page Object encapsulating the Album List page (album-list.html)
  */
+@Slf4j
 public class AlbumListPage extends Page {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AlbumListPage.class);
   private static final String ALBUM_LIST_HTML_FILE = "album-list.html";
   private static final String PAGE_URL = "file:" + AUT_PATH + ALBUM_LIST_HTML_FILE;
 
@@ -81,8 +79,8 @@ public class AlbumListPage extends Page {
    */
   public AlbumPage selectAlbum(String albumTitle) {
     // uses XPath to find list of html anchor tags with the class album in it
-    List<HtmlAnchor> albumLinks = (List<HtmlAnchor>) page.getByXPath("//tr[@class='album']//a");
-    for (HtmlAnchor anchor : albumLinks) {
+    var albumLinks = (List<HtmlAnchor>) page.getByXPath("//tr[@class='album']//a");
+    for (var anchor : albumLinks) {
       if (anchor.getTextContent().equals(albumTitle)) {
         try {
           anchor.click();

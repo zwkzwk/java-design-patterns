@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -91,15 +91,15 @@ public class Character {
 
   @Override
   public String toString() {
-    var sb = new StringBuilder();
-    sb.append("This is a ")
+    return new StringBuilder()
+        .append("This is a ")
         .append(fighterClass != null ? fighterClass : wizardClass)
         .append(" named ")
         .append(name)
         .append(" armed with a ")
         .append(weapon != null ? weapon : spell != null ? spell : "with nothing")
         .append(abilities != null ? " and wielding " + abilities + " abilities" : "")
-        .append('.');
-    return sb.toString();
+        .append('.')
+        .toString();
   }
 }

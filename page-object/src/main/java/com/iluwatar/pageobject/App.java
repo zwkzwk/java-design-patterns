@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -67,8 +67,8 @@ public final class App {
   public static void main(String[] args) {
 
     try {
-      File applicationFile =
-          new File(App.class.getClassLoader().getResource("sample-ui/login.html").getPath());
+      var classLoader = App.class.getClassLoader();
+      var applicationFile = new File(classLoader.getResource("sample-ui/login.html").getPath());
 
       // Should work for unix like OS (mac, unix etc...)
       if (Desktop.isDesktopSupported()) {

@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,13 +51,13 @@ public abstract class AbstractMessageManager implements MessageManager {
    */
   protected Instance findNextInstance(int currentId) {
     Instance result = null;
-    List<Integer> candidateList = instanceMap.keySet()
+    var candidateList = instanceMap.keySet()
         .stream()
         .filter((i) -> i > currentId && instanceMap.get(i).isAlive())
         .sorted()
         .collect(Collectors.toList());
     if (candidateList.isEmpty()) {
-      int index = instanceMap.keySet()
+      var index = instanceMap.keySet()
           .stream()
           .filter((i) -> instanceMap.get(i).isAlive())
           .sorted()
@@ -65,7 +65,7 @@ public abstract class AbstractMessageManager implements MessageManager {
           .get(0);
       result = instanceMap.get(index);
     } else {
-      int index = candidateList.get(0);
+      var index = candidateList.get(0);
       result = instanceMap.get(index);
     }
     return result;

@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,14 +43,14 @@ public class SizeSelectorTest {
    * Verify if the size selector gives the correct results
    */
   @Test
-  public void testMovement() {
-    final Creature normalCreature = mock(Creature.class);
+  void testMovement() {
+    final var normalCreature = mock(Creature.class);
     when(normalCreature.getSize()).thenReturn(Size.NORMAL);
 
-    final Creature smallCreature = mock(Creature.class);
+    final var smallCreature = mock(Creature.class);
     when(smallCreature.getSize()).thenReturn(Size.SMALL);
 
-    final SizeSelector normalSelector = new SizeSelector(Size.NORMAL);
+    final var normalSelector = new SizeSelector(Size.NORMAL);
     assertTrue(normalSelector.test(normalCreature));
     assertFalse(normalSelector.test(smallCreature));
   }

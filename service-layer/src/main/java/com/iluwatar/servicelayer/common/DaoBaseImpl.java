@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,10 +52,9 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
 
   @Override
   public E find(Long id) {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
-    E result = null;
-    try {
+    E result;
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       var criteria = session.createCriteria(persistentClass);
       criteria.add(Restrictions.idEq(id));
@@ -66,17 +65,14 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
     return result;
   }
 
   @Override
   public void persist(E entity) {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
-    try {
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       session.persist(entity);
       tx.commit();
@@ -85,17 +81,14 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
   }
 
   @Override
   public E merge(E entity) {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
     E result = null;
-    try {
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       result = (E) session.merge(entity);
       tx.commit();
@@ -104,17 +97,14 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
     return result;
   }
 
   @Override
   public void delete(E entity) {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
-    try {
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       session.delete(entity);
       tx.commit();
@@ -123,17 +113,14 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
   }
 
   @Override
   public List<E> findAll() {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
-    List<E> result = null;
-    try {
+    List<E> result;
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       Criteria criteria = session.createCriteria(persistentClass);
       result = criteria.list();
@@ -142,8 +129,6 @@ public abstract class DaoBaseImpl<E extends BaseEntity> implements Dao<E> {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
     return result;
   }

@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,24 +34,19 @@ public class SpellbookDaoImpl extends DaoBaseImpl<Spellbook> implements Spellboo
 
   @Override
   public Spellbook findByName(String name) {
-    var session = getSessionFactory().openSession();
     Transaction tx = null;
-    Spellbook result = null;
-    try {
+    Spellbook result;
+    try (var session = getSessionFactory().openSession()) {
       tx = session.beginTransaction();
       var criteria = session.createCriteria(persistentClass);
       criteria.add(Restrictions.eq("name", name));
       result = (Spellbook) criteria.uniqueResult();
-      result.getSpells().size();
-      result.getWizards().size();
       tx.commit();
     } catch (Exception e) {
       if (tx != null) {
         tx.rollback();
       }
       throw e;
-    } finally {
-      session.close();
     }
     return result;
   }

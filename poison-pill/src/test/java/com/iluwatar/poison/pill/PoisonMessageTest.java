@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,11 @@
 
 package com.iluwatar.poison.pill;
 
-import org.junit.jupiter.api.Test;
-
 import static com.iluwatar.poison.pill.Message.Headers;
 import static com.iluwatar.poison.pill.Message.POISON_PILL;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Date: 12/27/15 - 10:30 PM
@@ -37,33 +37,33 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class PoisonMessageTest {
 
   @Test
-  public void testAddHeader() {
+  void testAddHeader() {
     assertThrows(UnsupportedOperationException.class, () -> {
       POISON_PILL.addHeader(Headers.SENDER, "sender");
     });
   }
 
   @Test
-  public void testGetHeader() {
+  void testGetHeader() {
     assertThrows(UnsupportedOperationException.class, () -> {
       POISON_PILL.getHeader(Headers.SENDER);
     });
   }
 
   @Test
-  public void testGetHeaders() {
+  void testGetHeaders() {
     assertThrows(UnsupportedOperationException.class, POISON_PILL::getHeaders);
   }
 
   @Test
-  public void testSetBody() {
+  void testSetBody() {
     assertThrows(UnsupportedOperationException.class, () -> {
       POISON_PILL.setBody("Test message.");
     });
   }
 
   @Test
-  public void testGetBody() {
+  void testGetBody() {
     assertThrows(UnsupportedOperationException.class, POISON_PILL::getBody);
   }
 

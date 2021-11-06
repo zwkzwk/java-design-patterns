@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Saga representation.
- * Saga consists of chapters.
- * Every ChoreographyChapter is executed by a certain service.
+ * Saga representation. Saga consists of chapters. Every ChoreographyChapter is executed by a
+ * certain service.
  */
 public class Saga {
 
-  private List<Chapter> chapters;
+  private final List<Chapter> chapters;
 
 
   private Saga() {

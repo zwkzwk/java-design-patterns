@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,16 @@ package com.iluwatar.pageobject;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
  * Test Login Page Object
  */
 public class LoginPageTest {
 
-  private LoginPage loginPage = new LoginPage(new WebClient());
+  private final LoginPage loginPage = new LoginPage(new WebClient());
 
   @BeforeEach
   public void setUp() {
@@ -43,8 +42,8 @@ public class LoginPageTest {
   }
 
   @Test
-  public void testLogin() {
-    AlbumListPage albumListPage = loginPage
+  void testLogin() {
+    var albumListPage = loginPage
         .enterUsername("admin")
         .enterPassword("password")
         .login();

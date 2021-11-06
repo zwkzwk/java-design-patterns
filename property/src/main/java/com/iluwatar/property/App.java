@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,7 @@
 package com.iluwatar.property;
 
 import com.iluwatar.property.Character.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The Property pattern is also known as Prototype inheritance.
@@ -38,9 +37,8 @@ import org.slf4j.LoggerFactory;
  *
  * <p>In this example we demonstrate {@link Character} instantiation using the Property pattern.
  */
+@Slf4j
 public class App {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
   /**
    * Program entry point.
@@ -49,36 +47,36 @@ public class App {
    */
   public static void main(String[] args) {
     /* set up */
-    Prototype charProto = new Character();
+    var charProto = new Character();
     charProto.set(Stats.STRENGTH, 10);
     charProto.set(Stats.AGILITY, 10);
     charProto.set(Stats.ARMOR, 10);
     charProto.set(Stats.ATTACK_POWER, 10);
 
-    Character mageProto = new Character(Type.MAGE, charProto);
+    var mageProto = new Character(Type.MAGE, charProto);
     mageProto.set(Stats.INTELLECT, 15);
     mageProto.set(Stats.SPIRIT, 10);
 
-    Character warProto = new Character(Type.WARRIOR, charProto);
+    var warProto = new Character(Type.WARRIOR, charProto);
     warProto.set(Stats.RAGE, 15);
     warProto.set(Stats.ARMOR, 15); // boost default armor for warrior
 
-    Character rogueProto = new Character(Type.ROGUE, charProto);
+    var rogueProto = new Character(Type.ROGUE, charProto);
     rogueProto.set(Stats.ENERGY, 15);
     rogueProto.set(Stats.AGILITY, 15); // boost default agility for rogue
 
     /* usage */
-    Character mag = new Character("Player_1", mageProto);
+    var mag = new Character("Player_1", mageProto);
     mag.set(Stats.ARMOR, 8);
     LOGGER.info(mag.toString());
 
-    Character warrior = new Character("Player_2", warProto);
+    var warrior = new Character("Player_2", warProto);
     LOGGER.info(warrior.toString());
 
-    Character rogue = new Character("Player_3", rogueProto);
+    var rogue = new Character("Player_3", rogueProto);
     LOGGER.info(rogue.toString());
 
-    Character rogueDouble = new Character("Player_4", rogue);
+    var rogueDouble = new Character("Player_4", rogue);
     rogueDouble.set(Stats.ATTACK_POWER, 12);
     LOGGER.info(rogueDouble.toString());
   }

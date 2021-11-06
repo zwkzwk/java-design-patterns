@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,14 +43,14 @@ public class MovementSelectorTest {
    * Verify if the movement selector gives the correct results.
    */
   @Test
-  public void testMovement() {
-    final Creature swimmingCreature = mock(Creature.class);
+  void testMovement() {
+    final var swimmingCreature = mock(Creature.class);
     when(swimmingCreature.getMovement()).thenReturn(Movement.SWIMMING);
 
-    final Creature flyingCreature = mock(Creature.class);
+    final var flyingCreature = mock(Creature.class);
     when(flyingCreature.getMovement()).thenReturn(Movement.FLYING);
 
-    final MovementSelector swimmingSelector = new MovementSelector(Movement.SWIMMING);
+    final var swimmingSelector = new MovementSelector(Movement.SWIMMING);
     assertTrue(swimmingSelector.test(swimmingCreature));
     assertFalse(swimmingSelector.test(flyingCreature));
 

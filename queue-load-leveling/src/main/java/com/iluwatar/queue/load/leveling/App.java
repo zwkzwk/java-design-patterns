@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,7 @@ package com.iluwatar.queue.load.leveling;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Many solutions in the cloud involve running tasks that invoke services. In this environment, if a
@@ -58,9 +57,8 @@ import org.slf4j.LoggerFactory;
  * MessageQueue. The service executor class {@link ServiceExecutor} will pick up one task at a time
  * from the Queue and execute them.
  */
+@Slf4j
 public class App {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
   //Executor shut down time limit.
   private static final int SHUTDOWN_TIME = 15;
@@ -78,17 +76,17 @@ public class App {
 
     try {
       // Create a MessageQueue object.
-      MessageQueue msgQueue = new MessageQueue();
+      var msgQueue = new MessageQueue();
 
       LOGGER.info("Submitting TaskGenerators and ServiceExecutor threads.");
 
       // Create three TaskGenerator threads. Each of them will submit different number of jobs.
-      final Runnable taskRunnable1 = new TaskGenerator(msgQueue, 5);
-      final Runnable taskRunnable2 = new TaskGenerator(msgQueue, 1);
-      final Runnable taskRunnable3 = new TaskGenerator(msgQueue, 2);
+      final var taskRunnable1 = new TaskGenerator(msgQueue, 5);
+      final var taskRunnable2 = new TaskGenerator(msgQueue, 1);
+      final var taskRunnable3 = new TaskGenerator(msgQueue, 2);
 
       // Create e service which should process the submitted jobs.
-      final Runnable srvRunnable = new ServiceExecutor(msgQueue);
+      final var srvRunnable = new ServiceExecutor(msgQueue);
 
       // Create a ThreadPool of 2 threads and
       // submit all Runnable task for execution to executor..

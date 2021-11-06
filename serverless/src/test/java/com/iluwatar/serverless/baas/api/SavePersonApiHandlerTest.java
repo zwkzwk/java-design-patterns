@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,80 +23,80 @@
 
 package com.iluwatar.serverless.baas.api;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iluwatar.serverless.baas.api.SavePersonApiHandler;
 import com.iluwatar.serverless.baas.model.Address;
 import com.iluwatar.serverless.baas.model.Person;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Unit tests for SavePersonApiHandler
- * Created by dheeraj.mummar on 3/4/18.
+ * Unit tests for SavePersonApiHandler Created by dheeraj.mummar on 3/4/18.
  */
-@RunWith(MockitoJUnitRunner.class)
-public class SavePersonApiHandlerTest {
+class SavePersonApiHandlerTest {
 
   private SavePersonApiHandler savePersonApiHandler;
 
   @Mock
   private DynamoDBMapper dynamoDbMapper;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-  @Before
+  @BeforeEach
   public void setUp() {
+    MockitoAnnotations.openMocks(this);
     this.savePersonApiHandler = new SavePersonApiHandler();
     this.savePersonApiHandler.setDynamoDbMapper(dynamoDbMapper);
   }
 
   @Test
-  public void handleRequestSavePersonSuccessful() throws JsonProcessingException {
-    Person person = newPerson();
-    APIGatewayProxyResponseEvent apiGatewayProxyResponseEvent =
-        this.savePersonApiHandler
-            .handleRequest(apiGatewayProxyRequestEvent(objectMapper.writeValueAsString(person)), mock(Context.class));
+  void handleRequestSavePersonSuccessful() throws JsonProcessingException {
+    var person = newPerson();
+    var body = objectMapper.writeValueAsString(person);
+    var request = apiGatewayProxyRequestEvent(body);
+    var ctx = mock(Context.class);
+    var apiGatewayProxyResponseEvent = this.savePersonApiHandler.handleRequest(request, ctx);
     verify(dynamoDbMapper, times(1)).save(person);
-    Assert.assertNotNull(apiGatewayProxyResponseEvent);
-    Assert.assertEquals(new Integer(201), apiGatewayProxyResponseEvent.getStatusCode());
+    assertNotNull(apiGatewayProxyResponseEvent);
+    assertEquals(Integer.valueOf(201), apiGatewayProxyResponseEvent.getStatusCode());
   }
 
   @Test
-  public void handleRequestSavePersonException() {
-    APIGatewayProxyResponseEvent apiGatewayProxyResponseEvent =
-        this.savePersonApiHandler
-            .handleRequest(apiGatewayProxyRequestEvent("invalid sample request"), mock(Context.class));
-    Assert.assertNotNull(apiGatewayProxyResponseEvent);
-    Assert.assertEquals(new Integer(400), apiGatewayProxyResponseEvent.getStatusCode());
+  void handleRequestSavePersonException() {
+    var request = apiGatewayProxyRequestEvent("invalid sample request");
+    var ctx = mock(Context.class);
+    var apiGatewayProxyResponseEvent = this.savePersonApiHandler.handleRequest(request, ctx);
+    assertNotNull(apiGatewayProxyResponseEvent);
+    assertEquals(Integer.valueOf(400), apiGatewayProxyResponseEvent.getStatusCode());
   }
 
   private APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent(String body) {
-    APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent();
+    var apiGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent();
     return apiGatewayProxyRequestEvent.withBody(body);
   }
 
   private Person newPerson() {
-    Person person = new Person();
+    var person = new Person();
     person.setFirstName("Thor");
     person.setLastName("Odinson");
-    Address address = new Address();
+    var address = new Address();
     address.setAddressLineOne("1 Odin ln");
     address.setCity("Asgard");
     address.setState("country of the Gods");
     address.setZipCode("00001");
     person.setAddress(address);
-
     return person;
   }
 }

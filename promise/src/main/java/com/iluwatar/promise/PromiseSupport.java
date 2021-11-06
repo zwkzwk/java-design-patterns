@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,15 @@ package com.iluwatar.promise;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A really simplified implementation of future that allows completing it successfully with a value 
+ * A really simplified implementation of future that allows completing it successfully with a value
  * or exceptionally with an exception.
  */
 class PromiseSupport<T> implements Future<T> {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(PromiseSupport.class);
 
   private static final int RUNNING = 1;
@@ -93,13 +91,12 @@ class PromiseSupport<T> implements Future<T> {
     }
     if (state == COMPLETED) {
       return value;
-    } 
+    }
     throw new ExecutionException(exception);
   }
 
   @Override
-  public T get(long timeout, TimeUnit unit)
-      throws  ExecutionException, TimeoutException {
+  public T get(long timeout, TimeUnit unit) throws ExecutionException {
     synchronized (lock) {
       while (state == RUNNING) {
         try {
@@ -110,10 +107,10 @@ class PromiseSupport<T> implements Future<T> {
         }
       }
     }
-    
+
     if (state == COMPLETED) {
       return value;
-    } 
+    }
     throw new ExecutionException(exception);
   }
 }

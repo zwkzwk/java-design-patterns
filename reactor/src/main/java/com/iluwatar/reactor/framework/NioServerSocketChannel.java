@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,16 +30,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A wrapper over {@link NioServerSocketChannel} which can read and write data on a {@link
  * SocketChannel}.
  */
+@Slf4j
 public class NioServerSocketChannel extends AbstractNioChannel {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(NioServerSocketChannel.class);
 
   private final int port;
 
@@ -83,9 +81,9 @@ public class NioServerSocketChannel extends AbstractNioChannel {
    */
   @Override
   public ByteBuffer read(SelectionKey key) throws IOException {
-    SocketChannel socketChannel = (SocketChannel) key.channel();
-    ByteBuffer buffer = ByteBuffer.allocate(1024);
-    int read = socketChannel.read(buffer);
+    var socketChannel = (SocketChannel) key.channel();
+    var buffer = ByteBuffer.allocate(1024);
+    var read = socketChannel.read(buffer);
     buffer.flip();
     if (read == -1) {
       throw new IOException("Socket closed");
@@ -100,9 +98,9 @@ public class NioServerSocketChannel extends AbstractNioChannel {
    */
   @Override
   public void bind() throws IOException {
-    getJavaChannel().socket().bind(
-        new InetSocketAddress(InetAddress.getLocalHost(), port));
-    getJavaChannel().configureBlocking(false);
+    var javaChannel = getJavaChannel();
+    javaChannel.socket().bind(new InetSocketAddress(InetAddress.getLocalHost(), port));
+    javaChannel.configureBlocking(false);
     LOGGER.info("Bound TCP socket at port: {}", port);
   }
 
@@ -112,7 +110,7 @@ public class NioServerSocketChannel extends AbstractNioChannel {
    */
   @Override
   protected void doWrite(Object pendingWrite, SelectionKey key) throws IOException {
-    ByteBuffer pendingBuffer = (ByteBuffer) pendingWrite;
+    var pendingBuffer = (ByteBuffer) pendingWrite;
     ((SocketChannel) key.channel()).write(pendingBuffer);
   }
 }

@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,29 @@
 
 package com.iluwatar.servicelayer.wizard;
 
-import com.iluwatar.servicelayer.common.BaseDaoTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.iluwatar.servicelayer.common.BaseDaoTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Date: 12/28/15 - 11:46 PM
  *
  * @author Jeroen Meulemeester
  */
-public class WizardDaoImplTest extends BaseDaoTest<Wizard, WizardDaoImpl> {
+class WizardDaoImplTest extends BaseDaoTest<Wizard, WizardDaoImpl> {
 
   public WizardDaoImplTest() {
     super(Wizard::new, new WizardDaoImpl());
   }
 
   @Test
-  public void testFindByName() {
-    final WizardDaoImpl dao = getDao();
-    final List<Wizard> allWizards = dao.findAll();
-    for (final Wizard spell : allWizards) {
-      final Wizard byName = dao.findByName(spell.getName());
+  void testFindByName() {
+    final var dao = getDao();
+    final var allWizards = dao.findAll();
+    for (final var spell : allWizards) {
+      final var byName = dao.findByName(spell.getName());
       assertNotNull(byName);
       assertEquals(spell.getId(), byName.getId());
       assertEquals(spell.getName(), byName.getName());

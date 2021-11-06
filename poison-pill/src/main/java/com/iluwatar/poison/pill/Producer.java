@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,14 @@ package com.iluwatar.poison.pill;
 
 import com.iluwatar.poison.pill.Message.Headers;
 import java.util.Date;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Class responsible for producing unit of work that can be expressed as message and submitted to
  * queue.
  */
+@Slf4j
 public class Producer {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
 
   private final MqPublishPoint queue;
   private final String name;
@@ -57,7 +55,7 @@ public class Producer {
       throw new IllegalStateException(String.format(
           "Producer %s was stopped and fail to deliver requested message [%s].", body, name));
     }
-    Message msg = new SimpleMessage();
+    var msg = new SimpleMessage();
     msg.addHeader(Headers.DATE, new Date().toString());
     msg.addHeader(Headers.SENDER, name);
     msg.setBody(body);

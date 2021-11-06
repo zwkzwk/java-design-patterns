@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,15 @@
 
 package com.iluwatar.leaderelection.ring;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.iluwatar.leaderelection.AbstractInstance;
 import com.iluwatar.leaderelection.Message;
 import com.iluwatar.leaderelection.MessageType;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Field;
 import java.util.Queue;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * RingInstance unit test.
@@ -39,13 +39,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RingInstanceTest {
 
   @Test
-  public void testOnMessage() {
+  void testOnMessage() {
     try {
-      final RingInstance ringInstance = new RingInstance(null, 1, 1);
-      Message ringMessage = new Message(MessageType.HEARTBEAT, "");
+      final var ringInstance = new RingInstance(null, 1, 1);
+      var ringMessage = new Message(MessageType.HEARTBEAT, "");
       ringInstance.onMessage(ringMessage);
-      Class ringInstanceClass = AbstractInstance.class;
-      Field messageQueueField = ringInstanceClass.getDeclaredField("messageQueue");
+      var ringInstanceClass = AbstractInstance.class;
+      var messageQueueField = ringInstanceClass.getDeclaredField("messageQueue");
       messageQueueField.setAccessible(true);
       assertEquals(ringMessage, ((Queue<Message>) messageQueueField.get(ringInstance)).poll());
     } catch (IllegalAccessException | NoSuchFieldException e) {
@@ -54,11 +54,11 @@ public class RingInstanceTest {
   }
 
   @Test
-  public void testIsAlive() {
+  void testIsAlive() {
     try {
-      final RingInstance ringInstance = new RingInstance(null, 1, 1);
-      Class ringInstanceClass = AbstractInstance.class;
-      Field aliveField = ringInstanceClass.getDeclaredField("alive");
+      final var ringInstance = new RingInstance(null, 1, 1);
+      var ringInstanceClass = AbstractInstance.class;
+      var aliveField = ringInstanceClass.getDeclaredField("alive");
       aliveField.setAccessible(true);
       aliveField.set(ringInstance, false);
       assertFalse(ringInstance.isAlive());
@@ -68,8 +68,8 @@ public class RingInstanceTest {
   }
 
   @Test
-  public void testSetAlive() {
-    final RingInstance ringInstance = new RingInstance(null, 1, 1);
+  void testSetAlive() {
+    final var ringInstance = new RingInstance(null, 1, 1);
     ringInstance.setAlive(false);
     assertFalse(ringInstance.isAlive());
   }

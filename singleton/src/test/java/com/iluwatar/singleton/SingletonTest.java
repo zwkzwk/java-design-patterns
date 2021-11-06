@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.Supplier;
-
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -51,7 +49,7 @@ import org.junit.jupiter.api.Test;
  * @author Jeroen Meulemeester
  * @author Richard Jones
  */
-public abstract class SingletonTest<S> {
+abstract class SingletonTest<S> {
 
   /**
    * The singleton's getInstance method.
@@ -71,11 +69,11 @@ public abstract class SingletonTest<S> {
    * Test the singleton in a non-concurrent setting.
    */
   @Test
-  public void testMultipleCallsReturnTheSameObjectInSameThread() {
+  void testMultipleCallsReturnTheSameObjectInSameThread() {
     // Create several instances in the same calling thread
-    S instance1 = this.singletonInstanceMethod.get();
-    S instance2 = this.singletonInstanceMethod.get();
-    S instance3 = this.singletonInstanceMethod.get();
+    var instance1 = this.singletonInstanceMethod.get();
+    var instance2 = this.singletonInstanceMethod.get();
+    var instance3 = this.singletonInstanceMethod.get();
     // now check they are equal
     assertSame(instance1, instance2);
     assertSame(instance1, instance3);
@@ -86,22 +84,21 @@ public abstract class SingletonTest<S> {
    * Test singleton instance in a concurrent setting.
    */
   @Test
-  public void testMultipleCallsReturnTheSameObjectInDifferentThreads() throws Exception {
+  void testMultipleCallsReturnTheSameObjectInDifferentThreads() throws Exception {
     assertTimeout(ofMillis(10000), () -> {
       // Create 10000 tasks and inside each callable instantiate the singleton class
-      final List<Callable<S>> tasks = new ArrayList<>();
-      for (int i = 0; i < 10000; i++) {
-        tasks.add(this.singletonInstanceMethod::get);
-      }
+      final var tasks = IntStream.range(0, 10000)
+          .<Callable<S>>mapToObj(i -> this.singletonInstanceMethod::get)
+          .collect(Collectors.toCollection(ArrayList::new));
 
       // Use up to 8 concurrent threads to handle the tasks
-      final ExecutorService executorService = Executors.newFixedThreadPool(8);
-      final List<Future<S>> results = executorService.invokeAll(tasks);
+      final var executorService = Executors.newFixedThreadPool(8);
+      final var results = executorService.invokeAll(tasks);
 
       // wait for all of the threads to complete
-      final S expectedInstance = this.singletonInstanceMethod.get();
-      for (Future<S> res : results) {
-        final S instance = res.get();
+      final var expectedInstance = this.singletonInstanceMethod.get();
+      for (var res : results) {
+        final var instance = res.get();
         assertNotNull(instance);
         assertSame(expectedInstance, instance);
       }

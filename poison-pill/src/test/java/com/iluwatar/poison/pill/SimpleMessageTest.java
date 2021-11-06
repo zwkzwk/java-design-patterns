@@ -1,6 +1,6 @@
 /*
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2021 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,13 @@
 
 package com.iluwatar.poison.pill;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Date: 12/27/15 - 10:25 PM
@@ -41,12 +39,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SimpleMessageTest {
 
   @Test
-  public void testGetHeaders() {
-    final SimpleMessage message = new SimpleMessage();
+  void testGetHeaders() {
+    final var message = new SimpleMessage();
     assertNotNull(message.getHeaders());
     assertTrue(message.getHeaders().isEmpty());
 
-    final String senderName = "test";
+    final var senderName = "test";
     message.addHeader(Message.Headers.SENDER, senderName);
     assertNotNull(message.getHeaders());
     assertFalse(message.getHeaders().isEmpty());
@@ -54,9 +52,9 @@ public class SimpleMessageTest {
   }
 
   @Test
-  public void testUnModifiableHeaders() {
-    final SimpleMessage message = new SimpleMessage();
-    final Map<Message.Headers, String> headers = message.getHeaders();
+  void testUnModifiableHeaders() {
+    final var message = new SimpleMessage();
+    final var headers = message.getHeaders();
     assertThrows(UnsupportedOperationException.class, () -> {
       headers.put(Message.Headers.SENDER, "test");
     });
